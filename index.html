@@ -1,0 +1,662 @@
+
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  
+
+    <link rel="apple-touch-icon" type="image/png" href="https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png" />
+
+    <meta name="apple-mobile-web-app-title" content="CodePen">
+
+    <link rel="shortcut icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico" />
+
+    <link rel="mask-icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/logo-pin-b4b4269c16397ad2f0f7a01bcdf513a1994f4c94b8af2f191c09eb0d601762b1.svg" color="#111" />
+
+
+
+  
+  <title>TM352 Workshop</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/jquery.slick/1.5.9/slick.css'>
+  
+<style>
+/* IMPORT OPEN SANS GOOGLE FONT */
+
+@import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap");
+
+/* Content Container */
+.contentContainer {
+  width: 98%;
+  max-width: 980px;
+  margin: 0 auto;
+  padding-top: 35px;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-bottom:30px;
+}
+/* Container for slider. 
+Width set to 100% so player will fill it's parent container  */
+
+.sliderContainer {
+  width: 100%;
+}
+/* Slide/Video Caption */
+.slideCaption {
+   position: relative;
+  width: 100%;
+  height: auto;
+  font-size: 12px;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-left: 20px;
+  padding-top:10px;
+  padding-bottom:5px;
+  opacity:0.85;
+}
+/* Video Container DIV */
+.video-container div {
+  background: black;
+}
+/* Video Thumbnail DIV */
+.video-thumbnails div {
+  height: 75px;
+  background: black;
+  text-align: center;
+  /* Background Cover to fill DIV */
+  background-size: cover;
+}
+
+
+.videoWrapper {
+  position: relative;
+  width: 100%;
+  height: 0;
+  background-color: #000;
+}
+.videoWrapper43 {
+  padding-top: 75%;
+}
+.videoWrapper169 {
+  padding-top: 56%;
+}
+.videoIframe {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+}
+
+.videoPoster {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  border: 0;
+  outline: none;
+  background-position: 50% 50%;
+  background-size: 100% 100%;
+  background-size: cover;
+  text-indent: -999em;
+  overflow: hidden;
+  opacity: 1;
+  -webkit-transition: opacity 800ms, height 0s;
+  -moz-transition: opacity 800ms, height 0s;
+  transition: opacity 800ms, height 0s;
+  -webkit-transition-delay: 0s, 0s;
+  -moz-transition-delay: 0s, 0s;
+  transition-delay: 0s, 0s;
+}
+.videoWrapperActive .videoPoster {
+  opacity: 0;
+  height: 0;
+  -webkit-transition-delay: 0s, 800ms;
+  -moz-transition-delay: 0s, 800ms;
+  transition-delay: 0s, 800ms;
+}
+.videoIframe {
+  position: absolute;
+  top: 0;
+}
+/* *********
+  SVG PLAY BUTTON
+********** */
+
+.stroke-dotted {
+  stroke-dasharray: 4, 5;
+  stroke-width: 1px;
+  -webkit-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  -webkit-animation: spin 4s infinite linear;
+  animation: spin 4s infinite linear;
+  -webkit-transition: opacity 1s ease, stroke-width 1s ease;
+  transition: opacity 1s ease, stroke-width 1s ease;
+}
+.stroke-solid {
+  stroke-dashoffset: 0;
+  stroke-dasharray: 300;
+  stroke-width: 4px;
+  -webkit-transition: stroke-dashoffset 1s ease, opacity 1s ease;
+  transition: stroke-dashoffset 1s ease, opacity 1s ease;
+  opacity: 0;
+}
+.vid-icon {
+  -webkit-transition: -webkit-transform 200ms ease-out;
+  transition: -webkit-transform 200ms ease-out;
+  transition: transform 200ms ease-out;
+  transition: transform 200ms ease-out, -webkit-transform 200ms ease-out;
+}
+.play-vid:hover .stroke-dotted {
+  stroke-width: 4px;
+  opacity: 1;
+}
+.play-vid:hover .stroke-solid {
+  opacity: 1;
+  stroke-dashoffset: 300;
+}
+.play-vid:hover .icon {
+  -webkit-transform: scale(1.05);
+  transform: scale(1.05);
+  opacity: 1;
+}
+.play-vid {
+  cursor: pointer;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  opacity: 0.85;
+  width: 110px;
+  height: 110px;
+}
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+/* Default Slick Slide */
+.video-thumbnails .slick-slide {
+  /* Set Opacity so focus is on the centered slide.
+     Can apply CSS filters too. */
+  opacity: 0.65;
+  /* Set Transition ALL for smooth window resizing. */
+  transition: all 0.2s ease-in-out;
+  /* Scale down images not centered. */
+  transform: scale(0.8);
+  
+  
+  outline: none;
+  
+  /* Grab Hand Cursor */
+  
+  cursor: move;
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.slick-slide {color:white;}
+.video-thumbnails .slick-slide:hover {
+  /* Set Opacity so focus is on the centered slide.
+     Can apply CSS filters too. */
+  opacity: 1;
+  transform: scale(0.9);
+}
+.slick-slide.slick-center {
+  opacity: 1;
+  transform: scale(1);
+  cursor: pointer;
+}
+
+
+.no-fouc {visibility: hidden}
+pre {overflow:auto;}
+
+body {
+  line-height: 1.5;
+  background: #f8f8ff;
+  font-family: "Open Sans", sans-serif;
+  background: linear-gradient(360deg,#17212b,#ffffff);
+  color: #333;
+  font-size: 1em;
+}
+</style>
+
+  <script>
+  window.console = window.console || function(t) {};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+
+  
+</head>
+
+<body translate="no">
+  <article class="contentContainer">
+<div class="sliderContainer no-fouc">
+<div class="slider video-container"> 
+  
+  <!-- BEGIN VIDEO SLIDE 1  -->
+  
+  <div id="video-1">
+    <div class="videoWrapper videoWrapper169 js-videoWrapper"> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/2B-EAm9WQOk?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=2B-EAm9WQOk&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- the poster frame - in the form of a button to make it keyboard accessible --> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/2B-EAm9WQOk?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=2B-EAm9WQOk&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- Poster frame in the form of a button to make it keyboard accessible. Background is Youtube Image  -->
+      <button class="videoPoster js-videoPoster" style="background-image:url(https://img.youtube.com/vi/2B-EAm9WQOk/sddefault.jpg);">
+      <svg  class="play-vid" viewBox="0 0 100 100" >
+        <path class="stroke-solid" fill="none" stroke="red"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="stroke-dotted" fill="none" stroke="white"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="vid-icon" fill="red" d="M38,69c-1,0.5-1.8,0-1.8-1.1V32.1c0-1.1,0.8-1.6,1.8-1.1l34,18c1,0.5,1,1.4,0,1.9L38,69z"/>
+      </svg>
+      </button>
+    </div>
+    <div class="slideCaption">TM352 Workshop 1 Mr Abd Elrahman</div>
+  </div>
+  
+  <!-- // END VIDEO SLIDE 1  --> 
+  
+  <!-- BEGIN VIDEO SLIDE 2  -->
+  
+  <div id="video-2">
+    <div class="videoWrapper videoWrapper169 js-videoWrapper"> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/et5-s3zZESs?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=et5-s3zZESs&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- the poster frame - in the form of a button to make it keyboard accessible --> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/et5-s3zZESs?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=et5-s3zZESs&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- Poster frame in the form of a button to make it keyboard accessible. Background is Youtube Image  -->
+      <button class="videoPoster js-videoPoster" style="background-image:url(https://img.youtube.com/vi/et5-s3zZESs/sddefault.jpg);">
+      <svg  class="play-vid" viewBox="0 0 100 100" >
+        <path class="stroke-solid" fill="none" stroke="red"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="stroke-dotted" fill="none" stroke="white"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="vid-icon" fill="red" d="M38,69c-1,0.5-1.8,0-1.8-1.1V32.1c0-1.1,0.8-1.6,1.8-1.1l34,18c1,0.5,1,1.4,0,1.9L38,69z"/>
+      </svg>
+      </button>
+    </div>
+    <div class="slideCaption">TM352 Workshop 2 Mr Abd Elrahman</div>
+  </div>
+  
+  <!-- // END VIDEO SLIDE 2  --> 
+  
+  <!-- BEGIN VIDEO SLIDE 3  -->
+  
+  <div id="video-3">
+    <div class="videoWrapper videoWrapper169 js-videoWrapper"> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/sxmHtRO2Cw8?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=sxmHtRO2Cw8&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- the poster frame - in the form of a button to make it keyboard accessible --> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/sxmHtRO2Cw8?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=sxmHtRO2Cw8&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- Poster frame in the form of a button to make it keyboard accessible. Background is Youtube Image  -->
+      <button class="videoPoster js-videoPoster" style="background-image:url(https://img.youtube.com/vi/sxmHtRO2Cw8/sddefault.jpg);">
+      <svg  class="play-vid" viewBox="0 0 100 100" >
+        <path class="stroke-solid" fill="none" stroke="red"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="stroke-dotted" fill="none" stroke="white"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="vid-icon" fill="red" d="M38,69c-1,0.5-1.8,0-1.8-1.1V32.1c0-1.1,0.8-1.6,1.8-1.1l34,18c1,0.5,1,1.4,0,1.9L38,69z"/>
+      </svg>
+      </button>
+    </div>
+    <div class="slideCaption">TM352 Workshop 3 Mr Abd Elrahman</div>
+  </div>
+  
+  <!-- // END VIDEO SLIDE 3  --> 
+  
+  <!-- BEGIN VIDEO SLIDE 4  -->
+  
+  <div id="video-4">
+    <div class="videoWrapper videoWrapper169 js-videoWrapper"> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/N_wOrCPleY8?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=N_wOrCPleY8&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- the poster frame - in the form of a button to make it keyboard accessible --> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/N_wOrCPleY8?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=N_wOrCPleY8&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- Poster frame in the form of a button to make it keyboard accessible. Background is Youtube Image  -->
+      <button class="videoPoster js-videoPoster" style="background-image:url(https://img.youtube.com/vi/N_wOrCPleY8/sddefault.jpg);">
+      <svg  class="play-vid" viewBox="0 0 100 100" >
+        <path class="stroke-solid" fill="none" stroke="red"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="stroke-dotted" fill="none" stroke="white"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="vid-icon" fill="red" d="M38,69c-1,0.5-1.8,0-1.8-1.1V32.1c0-1.1,0.8-1.6,1.8-1.1l34,18c1,0.5,1,1.4,0,1.9L38,69z"/>
+      </svg>
+      </button>
+    </div>
+    <div class="slideCaption">TM352 Workshop 4 Mr Abd Elrahman</div>
+  </div>
+  
+  <!-- // END VIDEO SLIDE 4  --> 
+  
+  <!-- BEGIN VIDEO SLIDE 5  -->
+  
+  <div id="video-5">
+    <div class="videoWrapper videoWrapper169 js-videoWrapper"> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/HRTF3XBLL8Q?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=HRTF3XBLL8Q&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- the poster frame - in the form of a button to make it keyboard accessible --> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/HRTF3XBLL8Q?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=HRTF3XBLL8Q&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- Poster frame in the form of a button to make it keyboard accessible. Background is Youtube Image  -->
+      <button class="videoPoster js-videoPoster" style="background-image:url(https://img.youtube.com/vi/HRTF3XBLL8Q/sddefault.jpg);">
+      <svg  class="play-vid" viewBox="0 0 100 100" >
+        <path class="stroke-solid" fill="none" stroke="red"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="stroke-dotted" fill="none" stroke="white"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="vid-icon" fill="red" d="M38,69c-1,0.5-1.8,0-1.8-1.1V32.1c0-1.1,0.8-1.6,1.8-1.1l34,18c1,0.5,1,1.4,0,1.9L38,69z"/>
+      </svg>
+      </button>
+    </div>
+    <div class="slideCaption">TM352 Workshop 5 Mr Abd Elrahman</div>
+  </div>
+  
+  <!-- // END VIDEO SLIDE 5  --> 
+  
+  <!-- BEGIN VIDEO SLIDE 6  -->
+  
+  <div id="video-6">
+    <div class="videoWrapper videoWrapper169 js-videoWrapper"> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/bCV1q9c_blw?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=bCV1q9c_blw&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- the poster frame - in the form of a button to make it keyboard accessible --> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/bCV1q9c_blw?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=bCV1q9c_blw&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- Poster frame in the form of a button to make it keyboard accessible. Background is Youtube Image  -->
+      <button class="videoPoster js-videoPoster" style="background-image:url(https://img.youtube.com/vi/bCV1q9c_blw/sddefault.jpg);">
+      <svg  class="play-vid" viewBox="0 0 100 100" >
+        <path class="stroke-solid" fill="none" stroke="red"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="stroke-dotted" fill="none" stroke="white"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="vid-icon" fill="red" d="M38,69c-1,0.5-1.8,0-1.8-1.1V32.1c0-1.1,0.8-1.6,1.8-1.1l34,18c1,0.5,1,1.4,0,1.9L38,69z"/>
+      </svg>
+      </button>
+    </div>
+    <div class="slideCaption">TM352 Workshop 6 Mr Abd Elrahman</div>
+  </div>
+  
+  <!-- // END VIDEO SLIDE 6  --> 
+  
+  <!-- BEGIN VIDEO SLIDE 7  -->
+  
+  <div id="video-7">
+    <div class="videoWrapper videoWrapper169 js-videoWrapper"> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/BXy-PhtZp6o?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=BXy-PhtZp6o&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- the poster frame - in the form of a button to make it keyboard accessible --> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/BXy-PhtZp6o?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=BXy-PhtZp6o&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- Poster frame in the form of a button to make it keyboard accessible. Background is Youtube Image  -->
+      <button class="videoPoster js-videoPoster" style="background-image:url(https://img.youtube.com/vi/BXy-PhtZp6o/sddefault.jpg);">
+      <svg  class="play-vid" viewBox="0 0 100 100" >
+        <path class="stroke-solid" fill="none" stroke="red"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="stroke-dotted" fill="none" stroke="white"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="vid-icon" fill="red" d="M38,69c-1,0.5-1.8,0-1.8-1.1V32.1c0-1.1,0.8-1.6,1.8-1.1l34,18c1,0.5,1,1.4,0,1.9L38,69z"/>
+      </svg>
+      </button>
+    </div>
+    <div class="slideCaption">TM352 Workshop 7 Mr Abd Elrahman, TMA</div>
+  </div>
+  
+  <!-- // END VIDEO SLIDE 7  --> 
+  <!-- BEGIN VIDEO SLIDE 8  -->
+  
+  <div id="video-8">
+    <div class="videoWrapper videoWrapper169 js-videoWrapper"> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/orYykv7LjqI?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=orYykv7LjqI&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- the poster frame - in the form of a button to make it keyboard accessible --> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/orYykv7LjqI?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=orYykv7LjqI&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- Poster frame in the form of a button to make it keyboard accessible. Background is Youtube Image  -->
+      <button class="videoPoster js-videoPoster" style="background-image:url(https://img.youtube.com/vi/orYykv7LjqI/sddefault.jpg);">
+      <svg  class="play-vid" viewBox="0 0 100 100" >
+        <path class="stroke-solid" fill="none" stroke="red"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="stroke-dotted" fill="none" stroke="white"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="vid-icon" fill="red" d="M38,69c-1,0.5-1.8,0-1.8-1.1V32.1c0-1.1,0.8-1.6,1.8-1.1l34,18c1,0.5,1,1.4,0,1.9L38,69z"/>
+      </svg>
+      </button>
+    </div>
+    <div class="slideCaption">TM352 Workshop 8 Mr Abd Elrahman, TMA</div>
+  </div>
+  
+  <!-- // END VIDEO SLIDE 8  --> 
+  <!-- BEGIN VIDEO SLIDE 9  -->
+  
+  <div id="video-9">
+    <div class="videoWrapper videoWrapper169 js-videoWrapper"> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/NDLKjpjtdT0?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=NDLKjpjtdT0&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- the poster frame - in the form of a button to make it keyboard accessible --> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/NDLKjpjtdT0?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=NDLKjpjtdT0&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- Poster frame in the form of a button to make it keyboard accessible. Background is Youtube Image  -->
+      <button class="videoPoster js-videoPoster" style="background-image:url(https://img.youtube.com/vi/NDLKjpjtdT0/sddefault.jpg);">
+      <svg  class="play-vid" viewBox="0 0 100 100" >
+        <path class="stroke-solid" fill="none" stroke="red"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="stroke-dotted" fill="none" stroke="white"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="vid-icon" fill="red" d="M38,69c-1,0.5-1.8,0-1.8-1.1V32.1c0-1.1,0.8-1.6,1.8-1.1l34,18c1,0.5,1,1.4,0,1.9L38,69z"/>
+      </svg>
+      </button>
+    </div>
+    <div class="slideCaption">TM352 Workshop 9 Mr Abd Elrahman, THE</div>
+  </div>
+  
+  <!-- // END VIDEO SLIDE 9  --> 
+  <!-- BEGIN VIDEO SLIDE 10  -->
+  
+  <div id="video-10">
+    <div class="videoWrapper videoWrapper169 js-videoWrapper"> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/zWMQolPn7Lo?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=zWMQolPn7Lo&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- the poster frame - in the form of a button to make it keyboard accessible --> 
+      <!-- YouTube iframe. -->
+      
+      <iframe class="videoIframe js-videoIframe" src=""  frameborder="0" allowTransparency="true" allowfullscreen data-src="https://www.youtube.com/embed/zWMQolPn7Lo?enablejsapi=1&autoplay=1&modestbranding=1&rel=0&playlist=zWMQolPn7Lo&loop=1&mute=1"  allow="autoplay; fullscreen"></iframe>
+      <!-- Poster frame in the form of a button to make it keyboard accessible. Background is Youtube Image  -->
+      <button class="videoPoster js-videoPoster" style="background-image:url(https://img.youtube.com/vi/zWMQolPn7Lo/sddefault.jpg);">
+      <svg  class="play-vid" viewBox="0 0 100 100" >
+        <path class="stroke-solid" fill="none" stroke="red"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="stroke-dotted" fill="none" stroke="white"  d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
+         C97.3,23.7,75.7,2.3,49.9,2.5"/>
+        <path class="vid-icon" fill="red" d="M38,69c-1,0.5-1.8,0-1.8-1.1V32.1c0-1.1,0.8-1.6,1.8-1.1l34,18c1,0.5,1,1.4,0,1.9L38,69z"/>
+      </svg>
+      </button>
+    </div>
+    <div class="slideCaption">TM352 Workshop 10 Mr Abd Elrahman, THE</div>
+  </div>
+  
+  <!-- // END VIDEO SLIDE 10  --> 
+  
+  <!-- // END VIDEO CONTAINER --> 
+</div>
+
+<!-- BEGIN THUMBNAIL SLIDER  
+           Thumbnail and background-image ID should correspond to the Video ID.
+           Using the same image as the Video placer for the background as it's already cached - i.e. 1/2 the downloads then calling a seperate thumb.
+      -->
+<div class="slider video-thumbnails">
+  <div id="thumb-1" style="background-image:url(https://img.youtube.com/vi/2B-EAm9WQOk/sddefault.jpg)">
+    <h3>1</h3>
+  </div>
+  <div id="thumb-2" style="background-image:url(https://img.youtube.com/vi/et5-s3zZESs/sddefault.jpg)">
+    <h3>2</h3>
+  </div>
+  <div id="thumb-3" style="background-image:url(https://img.youtube.com/vi/sxmHtRO2Cw8/sddefault.jpg)">
+    <h3>3</h3>
+  </div>
+  <div id="thumb-4" style="background-image:url(https://img.youtube.com/vi/N_wOrCPleY8/sddefault.jpg)">
+    <h3>4</h3>
+  </div>
+  <div id="thumb-5" style="background-image:url(https://img.youtube.com/vi/HRTF3XBLL8Q/sddefault.jpg)">
+    <h3>5</h3>
+  </div>
+  <div id="thumb-6" style="background-image:url(https://img.youtube.com/vi/bCV1q9c_blw/sddefault.jpg)">
+    <h3>6</h3>
+  </div>
+  <div id="thumb-7" style="background-image:url(https://img.youtube.com/vi/BXy-PhtZp6o/sddefault.jpg)">
+    <h3>7</h3>
+  </div>
+  <div id="thumb-8" style="background-image:url(https://img.youtube.com/vi/orYykv7LjqI/sddefault.jpg)">
+    <h3>8</h3>
+  </div>
+  <div id="thumb-9" style="background-image:url(https://img.youtube.com/vi/NDLKjpjtdT0/sddefault.jpg)">
+    <h3>9</h3>
+  </div>
+    <div id="thumb-10" style="background-image:url(https://img.youtube.com/vi/zWMQolPn7Lo/sddefault.jpg)">
+    <h3>10</h3>
+  </div>
+  <!-- END THUMBNAIL SLIDER  --> 
+</div>
+
+
+
+
+
+</article>
+    <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-2c7831bb44f98c1391d6a4ffda0e1fd302503391ca806e7fcc7b9b87197aec26.js"></script>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+<script src='https://kenwheeler.github.io/slick/slick/slick.js'></script>
+      <script id="rendered-js" >
+//  SLICK SLIDER
+//  https://kenwheeler.github.io/slick/
+
+//  Parent Video Slider
+$(".video-container").slick({
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  arrows: false,
+  fade: false,
+  asNavFor: ".video-thumbnails" });
+
+
+//  Child Thumbnail Slider
+$(".video-thumbnails").slick({
+  slidesToShow: 5,
+  slidesToScroll: 1,
+  asNavFor: ".video-container",
+  dots: false,
+  arrows: false,
+  centerMode: true,
+  focusOnSelect: true });
+
+
+//  Video Poster Setup
+//  FORKED FROM CRAIG MONEY 
+//  https://codepen.io/pixelthing/details/zGZKaQ
+
+$(document).on("click", ".js-videoPoster", function (ev) {
+  "use strict";
+  ev.preventDefault();
+  videoStop();
+  var $poster = $(this);
+  var $wrapper = $poster.closest(".js-videoWrapper");
+  videoPlay($wrapper);
+});
+
+// play the targeted video (and hide the poster frame)
+function videoPlay($wrapper) {
+  "use strict";
+  var $iframe = $wrapper.find(".js-videoIframe");
+  var src = $iframe.data("src");
+  // hide poster
+  $wrapper.addClass("videoWrapperActive");
+  // add iframe src in, starting the video
+  $iframe.attr("src", src);
+}
+
+// stop the targeted/all videos (and re-instate the poster frames)
+function videoStop($wrapper) {
+  "use strict";
+  // if we're stopping all videos on page
+  if (!$wrapper) {
+    var $wrapper = $(".js-videoWrapper");
+    var $iframe = $(".js-videoIframe");
+    // if we're stopping a particular video
+  } else {
+    var $iframe = $wrapper.find(".js-videoIframe");
+  }
+  // reveal poster
+  $wrapper.removeClass("videoWrapperActive");
+  // remove youtube link, stopping the video from playing in the background
+  $iframe.attr("src", "");
+}
+
+// On before slide change
+$(".video-container").on("beforeChange", function (
+event,
+slick,
+currentSlide,
+nextSlide)
+{
+  videoStop();
+});
+
+$(function () {
+  $('.no-fouc').removeClass('no-fouc');
+  console.log("ready!");
+});
+//# sourceURL=pen.js
+    </script>
+
+  
+</body>
+
+</html>
